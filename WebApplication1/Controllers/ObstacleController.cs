@@ -5,10 +5,6 @@ namespace WebApplication1.Controllers
 {
     public class ObstacleController : Controller
     {
-        //public IActionResult Index()
-        //{
-        //return View();
-        //}
 
         [HttpGet]
         public ActionResult DataForm()
