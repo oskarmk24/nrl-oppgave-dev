@@ -10,11 +10,15 @@ namespace WebApplication1.Models
         
         [Required(ErrorMessage = "Field is required.")]
         [Range(0,200)]
-        public double ObstacleHeight { get; set; }
+        public decimal ObstacleHeight { get; set; }
         
         [Required(ErrorMessage = "Field is required.")]
         [MaxLength(1000)]
         public string ObstacleDescription { get; set; }
+
+        [Required(ErrorMessage = "Field is required.")]
+        [MaxLength(1000)]
+        public string ObstacleLocation { get; set; }
 
     }
 }

@@ -12,6 +12,9 @@
         </header>
 
         <form asp-action="DataForm" method="post" class="space-y-5">
+            <div asp-validation-summary="ModelOnly" class="text-sm text-red-600"></div>
+            <input type="hidden" asp-for="ObstacleLocation" id="ObstacleLocation" />
+
             <div class="grid gap-5 sm:grid-cols-2">
                 <!-- Obstacle Name -->
                 <div class="sm:col-span-2">
@@ -50,13 +53,28 @@
     </div>
 </section>
 
-<!--Added map section-->
+
+
+<!--Added map section
 <section class="mx-auto max-w-2xl pt-6">
     <div class="bg-white rounded-2xl shadow-sm ring-1 ring-gray-200 p-6">
         <header class="mb-6">
             <h1 class="text-2xl font-semibold">Map</h1>
         </header>
         <div id="map"></div>
+    </div>
+</section> -->
+
+
+<!-- Map section stays separate -->
+<section class="mx-auto max-w-2xl pt-6">
+    <div class="bg-white rounded-2xl shadow-sm ring-1 ring-gray-200 p-6">
+        <header class="mb-6">
+            <h1 class="text-2xl font-semibold">Map</h1>
+        </header>
+        <div id="map"></div>
+        <!-- NEW: tiny hint text -->
+        <div id="coordsHint" class="mt-2 text-sm text-gray-600">Click the map to drop a pin.</div>
     </div>
 </section>
 
@@ -67,16 +85,50 @@
     }
 </style>
 
-
 @section Scripts {
     <!-- If you use client-side validation, keep the standard validation partial -->
     <partial name="_ValidationScriptsPartial" />
-    
-    <script>
-        var map = L.map('map').setView([60.39, 5.32], 13); // Example: Bergen, Norway
 
+    <script>
+        // your original map init
+        var map = L.map('map').setView([60.39, 5.32], 13); // Bergen, Norway
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors'
+            attribution: '© OpenStreetMap contributors',
+            maxZoom: 19
         }).addTo(map);
+
+        // NEW: wire the map to the hidden input
+        var marker = null;
+        var hidden = document.getElementById('ObstacleLocation');
+        var hint = document.getElementById('coordsHint');
+
+        function setLocation(lat, lng) {
+            // Save as GeoJSON Point string: [lng, lat]
+            var payload = {
+                type: "Point",
+                coordinates: [Number(lng.toFixed(6)), Number(lat.toFixed(6))]
+            };
+            hidden.value = JSON.stringify(payload);
+            if (hint) {
+                hint.textContent = "Selected: lat " + lat.toFixed(6) + ", lng " + lng.toFixed(6);
+            }
+        }
+
+        function placeOrMoveMarker(latlng) {
+            if (!marker) {
+                marker = L.marker(latlng, { draggable: true }).addTo(map);
+                marker.on('dragend', function (e) {
+                    var p = e.target.getLatLng();
+                    setLocation(p.lat, p.lng);
+                });
+            } else {
+                marker.setLatLng(latlng);
+            }
+            setLocation(latlng.lat, latlng.lng);
+        }
+
+        map.on('click', function (e) {
+            placeOrMoveMarker(e.latlng);
+        });
     </script>
 }

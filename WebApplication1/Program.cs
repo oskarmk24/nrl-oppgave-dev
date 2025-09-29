@@ -1,4 +1,5 @@
 using MySqlConnector;
+using WebApplication1.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,7 +10,13 @@ builder.Services.AddControllersWithViews();
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 //Oppretter en instans av MySqlConnection
-builder.Services.AddSingleton(new MySqlConnection(connectionString));
+//builder.Services.AddSingleton(new MySqlConnection(connectionString));
+
+//Replace raw connection with pooled datasource
+builder.Services.AddSingleton(sp => new MySqlDataSourceBuilder(connectionString).Build());
+
+//Register your Dapper repository
+builder.Services.AddScoped<ReportsRepository>();
 
 var app = builder.Build();
 
