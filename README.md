@@ -35,17 +35,14 @@ ObstacleLocation: longtext (NULL)
 
 Docker (Work-In-Progress)
 
-Docker compose filen skal opprette to containere, en for web app serveren og en container med mariaDB med obstacledb database og ferdig Reports tabell.
+Docker compose filen skal opprette to containere, en for web app serveren og en container med mariaDB med obstacledb database og ferdig Reports tabell. (Ikke tatt i bruk enda)
+
+Prosjektet bruker compose filen som ble opprettet under lab øvelsene i denne omgang.
 
 1. Kjør docker compose up --build
 2. Åpne http://localhost:8080
 
 
-# Drift uten docker compose. (Bruk denne)
-
-1. Gå inn i prosjekt mappen:
-   - cd WebApplication1
-   - dotnet run
 
 
 # Testing
