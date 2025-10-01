@@ -1,35 +1,17 @@
 services:
-  mariadbcontainer:
-    image: mariadb:11
-    environment:
-      MARIADB_ROOT_PASSWORD: test123
-      MARIADB_DATABASE: obstacledb
-    ports:
-      - "3306:3306"
-    volumes:
-      - dbdata:/var/lib/mysql
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
-    networks:
-      - appnet
-
   webapplication1:
+    image: ${DOCKER_REGISTRY-}webapplication1
     build:
       context: .
       dockerfile: WebApplication1/Dockerfile
     ports:
-      - "5000:8080"
+       - "5000:8080"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__DefaultConnection=server=mariadbcontainer;port=3306;database=obstacledb;user=root;password=test123;
-    depends_on:
-      - mariadbcontainer
     networks:
       - appnet
-
-volumes:
-  dbdata:
-
 networks:
-  appnet:
-    external: true
-    name: appnet
+    appnet: #Legge til appnet nettverket som er ekstern nettverk
+       external: true
+       name: appnet

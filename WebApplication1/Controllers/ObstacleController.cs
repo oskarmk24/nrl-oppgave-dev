@@ -4,36 +4,37 @@ using WebApplication1.Data;
 
 namespace WebApplication1.Controllers
 {
+    /// <summary>
+    /// Controller som håndterer skjema for å registrere hinder.
+    /// </summary>
     public class ObstacleController : Controller
     {
-        private readonly ReportsRepository _repo;   // <-- injected repo
+        // Repository brukes til å lagre data i databasen
+        private readonly ReportsRepository _repo;
 
         public ObstacleController(ReportsRepository repo)
         {
             _repo = repo;
         }
 
-
+        /// <summary>
+        /// Viser skjemaet for å registrere et nytt hinder (GET).
+        /// </summary>
         [HttpGet]
         public ActionResult DataForm()
         {
             return View();
         }
 
-        /*[HttpPost]
-        public ActionResult DataForm(ObstacleData obstacleData)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(obstacleData);
-            }
-            return View("Overview", obstacleData);
-        }
-        */
-
+        /// <summary>
+        /// Tar imot skjema-data (POST).
+        /// Hvis data er gyldige lagres de i databasen og vi viser en oversiktsside.
+        /// Hvis noe er feil, vises skjemaet på nytt med feilmeldinger.
+        /// </summary>
         [HttpPost]
         public async Task<IActionResult> DataForm(ObstacleData obstacleData)
         {
+            // Sjekker at modellen er gyldig (validering fra ObstacleData)
             if (!ModelState.IsValid)
             {
                 return View(obstacleData);
@@ -41,25 +42,26 @@ namespace WebApplication1.Controllers
 
             try
             {
-                // Save to obstacledb.reports (Dapper)
+                // Lagrer data i databasen via repository
                 int newId = await _repo.CreateAsync(
                     obstacleData.ObstacleName,
-                    obstacleData.ObstacleHeight,      // DECIMAL(10,0)
+                    obstacleData.ObstacleHeight,
                     obstacleData.ObstacleDescription,
-                    obstacleData.ObstacleLocation      // Leaflet JSON from hidden input
+                    obstacleData.ObstacleLocation
                 );
 
+                // Gir beskjed om at lagring var vellykket
                 ViewBag.SavedReportId = newId;
                 TempData["Success"] = "Report saved with ID " + newId;
             }
             catch (System.Exception ex)
             {
-                // Show a friendly error and stay on the form
+                // Viser en feilmelding hvis databasen ikke svarer
                 ModelState.AddModelError(string.Empty, "Database error: " + ex.Message);
                 return View(obstacleData);
             }
 
-            // Show summary page after save
+            // Viser oversiktssiden med dataene etter at de er lagret
             return View("Overview", obstacleData);
         }
     }

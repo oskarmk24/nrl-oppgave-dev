@@ -3,42 +3,48 @@ using WebApplication1.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Legger til støtte for MVC (controllers + views)
 builder.Services.AddControllersWithViews();
 
-//Henter connection string fra “appsettings.json” filen
+// Henter connection string fra appsettings.json
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-//Oppretter en instans av MySqlConnection
-//builder.Services.AddSingleton(new MySqlConnection(connectionString));
-
-//Replace raw connection with pooled datasource
+// Oppretter en databaseforbindelse med connection pooling
 builder.Services.AddSingleton(sp => new MySqlDataSourceBuilder(connectionString).Build());
 
-//Register your Dapper repository
+// Registrerer vårt repository slik at det kan brukes i controllers
 builder.Services.AddScoped<ReportsRepository>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Konfigurerer hvordan appen skal håndtere HTTP-forespørsler
 if (!app.Environment.IsDevelopment())
 {
+    // Viser en feilsiden hvis noe går galt (i produksjon)
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+
+    // Legger på sikkerhetsheader for HTTPS
     app.UseHsts();
 }
 
+// Tvinger HTTPS i stedet for HTTP
 app.UseHttpsRedirection();
+
+// Setter opp routing (hvilke URL-er som går til hvilke controllers)
 app.UseRouting();
 
+// Sjekker tilgang/autorisasjon (ikke brukt mye her, men klart for senere)
 app.UseAuthorization();
 
+// Gjør det mulig å bruke statiske filer (CSS, JS, bilder)
 app.MapStaticAssets();
 
+// Standard route: kjører HomeController -> Index som startside
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
 
-
+// Starter applikasjonen
 app.Run();
+

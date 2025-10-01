@@ -11,27 +11,28 @@
             <p class="text-gray-600 mt-1">Thank you for registering an obstacle:</p>
         </header>
 
+        <!-- Viser dataene brukeren har fylt ut i skjemaet -->
         <dl class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <!-- Obstacle Name -->
+            <!-- Navn på hinder -->
             <div class="sm:col-span-1">
                 <dt class="text-sm font-medium text-gray-600">Obstacle Name</dt>
                 <dd class="mt-1 text-base text-gray-900 break-words">@Model.ObstacleName</dd>
             </div>
 
-            <!-- Obstacle Height -->
+            <!-- Høyde på hinder -->
             <div class="sm:col-span-1">
                 <dt class="text-sm font-medium text-gray-600">Height</dt>
                 <dd class="mt-1 text-base text-gray-900">@Model.ObstacleHeight</dd>
             </div>
 
-            <!-- Obstacle Description -->
+            <!-- Beskrivelse av hinder -->
             <div class="sm:col-span-1">
                 <dt class="text-sm font-medium text-gray-600">Description</dt>
                 <dd class="mt-1 text-base text-gray-900 break-words sm:col-span-3">@Model.ObstacleDescription</dd>
             </div>
         </dl>
 
-        <!-- Back button -->
+        <!-- Tilbake-knapp som sender brukeren til startsiden -->
         <div class="pt-2">
             <a asp-controller="Home" asp-action="Index"
                class="inline-flex items-center rounded-lg px-4 py-2 ring-1 ring-gray-300 hover:bg-gray-50">
