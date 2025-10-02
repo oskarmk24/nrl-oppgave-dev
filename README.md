@@ -37,9 +37,7 @@ ObstacleLocation: longtext (NULL)
 
 Docker compose filen skal opprette to containere, en for web app serveren og en container med mariaDB med obstacledb database og ferdig Reports tabell. (Ikke tatt i bruk enda)
 
-(Nåværende løsning)
-
-Prosjektet bruker compose filen som ble opprettet under lab øvelsene i denne omgang.
+Akkurat nå må Reports tabellen opprettes manuelt i mariaDB containeren for at submit report skal fungere.
 
 1. Kjør docker compose up --build
 2. Åpne http://localhost:5173
