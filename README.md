@@ -42,7 +42,7 @@ Docker compose filen skal opprette to containere, en for web app serveren og en 
 Prosjektet bruker compose filen som ble opprettet under lab øvelsene i denne omgang.
 
 1. Kjør docker compose up --build
-2. Åpne http://localhost:8080
+2. Åpne http://localhost:5173
 
 
 
