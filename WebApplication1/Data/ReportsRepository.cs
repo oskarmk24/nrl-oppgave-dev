@@ -8,14 +8,14 @@ namespace WebApplication1.Data
     /// </summary>
     public class ReportsRepository
     {
-        private readonly MySqlDataSource _ds;
+        private readonly MySqlDataSource _datasource;
 
         /// <summary>
         /// Lager et nytt repository og kobler det til databasekilden.
         /// </summary>
-        public ReportsRepository(MySqlDataSource ds)
+        public ReportsRepository(MySqlDataSource datasource)
         {
-            _ds = ds;
+            _datasource = datasource;
         }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace WebApplication1.Data
                 VALUES (@ObstacleName, @ObstacleHeight, @ObstacleDescription, @ObstacleLocation);";
 
             // Åpner en kobling til databasen
-            await using var conn = await _ds.OpenConnectionAsync();
+            await using var conn = await _datasource.OpenConnectionAsync();
 
             // Utfører spørringen med verdiene vi sender inn
             int rows = await conn.ExecuteAsync(sql, new
