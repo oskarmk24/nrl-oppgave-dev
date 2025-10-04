@@ -1,5 +1,5 @@
 version: "3.9"
-
+# oppretter to docker containere i et internt nettverk.
 services:
   webapplication1:
     build:

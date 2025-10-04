@@ -8,7 +8,7 @@
     <div class="bg-white rounded-2xl shadow-sm ring-1 ring-gray-200 p-6 space-y-4">
         <header>
             <h1 class="text-2xl font-semibold">Overview</h1>
-            <p class="text-gray-600 mt-1">Thank you for registering an obstacle:</p>
+            <p class="text-gray-600 mt-1">Thank you for registering an obstacle</p>
         </header>
 
         <!-- Viser dataene brukeren har fylt ut i skjemaet -->
@@ -31,6 +31,38 @@
                 <dd class="mt-1 text-base text-gray-900 break-words sm:col-span-3">@Model.ObstacleDescription</dd>
             </div>
         </dl>
+
+        @if (!string.IsNullOrWhiteSpace(Model.ObstacleLocation))
+           {
+            <div class="mt-4 space-y-2">
+                <p><strong>Location:</strong> @Model.ObstacleLocation</p>
+                <div id="map2" style="height: 320px;" class="rounded-xl ring-1 ring-gray-200"></div>
+            </div>
+
+            <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+            <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+        
+        <script>
+        // Forventer format: {"type":"Point","coordinates":[lng, lat]}, dersom den ikke kan hentes vil de vise error melding.
+
+            try
+            {
+                var geo = JSON.parse(@Html.Raw(Json.Serialize(Model.ObstacleLocation)));
+                var lng = geo.coordinates[0];
+                var lat = geo.coordinates[1];
+
+                var map2 = L.map('map2').setView([lat, lng], 13);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution: '&copy; OpenStreetMap'}).addTo(map2);
+                L.marker([lat, lng]).addTo(map2);
+            }
+
+            catch (error)
+            {
+                console.warn('Could not parse location JSON', error);
+            }
+
+        </script>
+}
 
         <!-- Tilbake-knapp som sender brukeren til startsiden -->
         <div class="pt-2">
