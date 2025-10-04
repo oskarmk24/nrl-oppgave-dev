@@ -39,7 +39,7 @@ services:
       retries: 20
 
 networks:
-  appnet: {}   # internt nettverk, ikke lenger external
+  appnet: {}   # internt nettverk
 
 volumes:
   dbdata:
